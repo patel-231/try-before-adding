@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VANGUARD ATELIER | Shopping Bag</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;700;800&amp;family=Manrope:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-low": "#f4f3f1",
+              "on-primary": "#ffffff",
+              "inverse-surface": "#2f3130",
+              "on-error": "#ffffff",
+              "inverse-on-surface": "#f1f1ef",
+              "secondary": "#7c5730",
+              "outline": "#747878",
+              "surface-container-highest": "#e3e2e0",
+              "secondary-fixed-dim": "#eebd8e",
+              "on-tertiary-fixed": "#121e17",
+              "primary-container": "#1c1b1b",
+              "tertiary-fixed-dim": "#bccabf",
+              "background": "#faf9f7",
+              "surface-variant": "#e3e2e0",
+              "on-secondary-fixed": "#2c1600",
+              "on-secondary": "#ffffff",
+              "primary-fixed": "#e5e2e1",
+              "primary": "#000000",
+              "error-container": "#ffdad6",
+              "tertiary-container": "#121e17",
+              "inverse-primary": "#c8c6c5",
+              "on-secondary-fixed-variant": "#61401b",
+              "surface-dim": "#dadad8",
+              "on-tertiary-container": "#7a877d",
+              "on-primary-fixed": "#1c1b1b",
+              "surface-container-lowest": "#ffffff",
+              "secondary-fixed": "#ffdcbd",
+              "on-surface": "#1a1c1b",
+              "on-surface-variant": "#444748",
+              "on-primary-fixed-variant": "#474746",
+              "on-background": "#1a1c1b",
+              "on-error-container": "#93000a",
+              "surface": "#faf9f7",
+              "on-primary-container": "#858383",
+              "on-tertiary": "#ffffff",
+              "primary-fixed-dim": "#c8c6c5",
+              "outline-variant": "#c4c7c7",
+              "on-tertiary-fixed-variant": "#3d4a41",
+              "error": "#ba1a1a",
+              "secondary-container": "#fdcb9b",
+              "on-secondary-container": "#79542d",
+              "surface-tint": "#5f5e5e",
+              "tertiary": "#000000",
+              "surface-container": "#efeeec",
+              "surface-container-high": "#e9e8e6",
+              "tertiary-fixed": "#d8e6da",
+              "surface-bright": "#faf9f7"
+            },
+            fontFamily: {
+              "headline": ["Epilogue"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .tonal-layering {
+            background-color: var(--surface-container-low);
+        }
+        .vertical-drift:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- TopNavBar -->
+<nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl rounded-xl bg-[#faf9f7]/80 dark:bg-[#1a1a1a]/80 backdrop-blur-xl flex justify-between items-center px-8 py-4 z-50 shadow-[0_12px_40px_rgba(26,28,27,0.06)] font-['Epilogue'] tracking-tight">
+<div class="text-xl font-bold tracking-tighter text-[#1a1a1a] dark:text-[#faf9f7]">VANGUARD ATELIER</div>
+<div class="hidden md:flex items-center gap-12">
+<a class="text-[#1a1a1a] dark:text-[#faf9f7] opacity-60 hover:opacity-100 transition-opacity duration-400" href="#">COLLECTIONS</a>
+<a class="text-[#1a1a1a] dark:text-[#faf9f7] opacity-60 hover:opacity-100 transition-opacity duration-400" href="#">SHOP</a>
+<a class="text-[#1a1a1a] dark:text-[#faf9f7] opacity-60 hover:opacity-100 transition-opacity duration-400" href="#">EDITORIAL</a>
+</div>
+<div class="flex items-center gap-6 text-[#1a1a1a] dark:text-[#faf9f7]">
+<button class="hover:opacity-100 transition-opacity duration-400 flex items-center">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+<span class="ml-1 text-xs font-bold font-label">2</span>
+</button>
+<button class="hover:opacity-100 transition-opacity duration-400">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</button>
+</div>
+</nav>
+<main class="pt-32 pb-40 px-6 max-w-7xl mx-auto min-h-screen">
+<header class="mb-20">
+<h1 class="font-headline text-5xl font-extrabold tracking-tighter mb-4">SHOPPING BAG</h1>
+<p class="font-label text-sm uppercase tracking-widest opacity-60">2 ITEMS SELECTED</p>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-20">
+<!-- Items List -->
+<div class="lg:col-span-8 space-y-12">
+<!-- Product 1 -->
+<div class="group flex flex-col md:flex-row gap-8 pb-12 transition-all">
+<div class="w-full md:w-48 aspect-[3/4] overflow-hidden rounded-lg bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Studio photography of a high-end structured charcoal wool coat draped over a minimalist pedestal with dramatic shadow play" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDa-YDAoOwe8wxcweB2eDvvYDWLsBNSIPiya0HBXvXf-n_CSG7mkhk3AOnNxpENe8NGlPV3ZqEPgjCL7fwFZ54ndJXD6Ndn1L5Di7GRcqz6wJYgt70JITXIOJM4XvHnSEOwfrnhiqQ7mOaTofWJLfPkmTlqUrLq3JdZRUPPaqTG0bLsT3d1QmoBFTcI10X_eJE6gvb3bflJfWF0Rh2wKMCj2Aveef-qHATqcdYvpFyfg8T0KQHxKWSalj9xVy4puh_e5U7JvSNdL3eC"/>
+</div>
+<div class="flex-1 flex flex-col justify-between py-2">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline text-2xl font-bold tracking-tight mb-2">Structured Wool Coat</h3>
+<p class="font-label text-xs uppercase tracking-widest opacity-50 mb-4">Color: Obsidian Noir / Size: 48</p>
+</div>
+<button class="opacity-40 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<div class="flex justify-between items-end">
+<div class="flex items-center gap-6 bg-surface-container-low px-4 py-2 rounded-full">
+<button class="hover:text-secondary transition-colors"><span class="material-symbols-outlined text-sm" data-icon="remove">remove</span></button>
+<span class="font-label font-bold text-sm px-2">1</span>
+<button class="hover:text-secondary transition-colors"><span class="material-symbols-outlined text-sm" data-icon="add">add</span></button>
+</div>
+<div class="text-right">
+<p class="font-headline text-xl font-bold">$1,240.00</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="group flex flex-col md:flex-row gap-8 pb-12 transition-all">
+<div class="w-full md:w-48 aspect-[3/4] overflow-hidden rounded-lg bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Detailed close up of tailored cream linen trousers hanging against a soft white plaster wall with natural window lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_3dQlJhRK78ItBwwrrtaHrbHkqBw7T7GsVXACbEBahzKee8dQSfpywtsJ4IFrLVsKCek0RxxsFL2iOVi8yLWnbJVKQ1Uyamk0p5bQf5-Ry6HE5pfQdIyfNJw5g45UgDjPuc0s9c_Ezh_OL7TxWSThObCWs6LegyKnR__3Gq6lWJaIYhAG81VtXMYbo5H-VZ3sC03c-UVUu2oASKyYLGHDrm27me6Kjf3TfAnLtNWRxUuOw8nTUiU6OHA7kCjBZ6Tmeuprz1_xkkVa"/>
+</div>
+<div class="flex-1 flex flex-col justify-between py-2">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline text-2xl font-bold tracking-tight mb-2">Tailored Linen Trouser</h3>
+<p class="font-label text-xs uppercase tracking-widest opacity-50 mb-4">Color: Natural Ecru / Size: 32</p>
+</div>
+<button class="opacity-40 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<div class="flex justify-between items-end">
+<div class="flex items-center gap-6 bg-surface-container-low px-4 py-2 rounded-full">
+<button class="hover:text-secondary transition-colors"><span class="material-symbols-outlined text-sm" data-icon="remove">remove</span></button>
+<span class="font-label font-bold text-sm px-2">1</span>
+<button class="hover:text-secondary transition-colors"><span class="material-symbols-outlined text-sm" data-icon="add">add</span></button>
+</div>
+<div class="text-right">
+<p class="font-headline text-xl font-bold">$480.00</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Order Summary -->
+<div class="lg:col-span-4">
+<div class="bg-surface-container-low p-10 rounded-xl sticky top-32">
+<h2 class="font-headline text-xl font-bold mb-8">ORDER SUMMARY</h2>
+<div class="space-y-6 mb-10">
+<div class="flex justify-between items-center text-sm">
+<span class="font-label opacity-60">SUBTOTAL</span>
+<span class="font-bold tracking-tight">$1,720.00</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="font-label opacity-60">SHIPPING ESTIMATE</span>
+<span class="font-label text-xs tracking-widest uppercase text-secondary">CALCULATED AT NEXT STEP</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="font-label opacity-60">TAX</span>
+<span class="font-bold tracking-tight">$0.00</span>
+</div>
+</div>
+<div class="border-t border-outline/10 pt-8 mb-10 flex justify-between items-center">
+<span class="font-headline font-bold">TOTAL</span>
+<span class="font-headline text-2xl font-extrabold">$1,720.00</span>
+</div>
+<button class="w-full bg-primary text-on-primary py-5 rounded-sm font-label text-xs font-bold tracking-[0.2em] uppercase hover:bg-secondary transition-all duration-500 shadow-xl vertical-drift">
+                        Proceed to Shipping
+                    </button>
+<div class="mt-8 flex items-center justify-center gap-4 opacity-40">
+<span class="material-symbols-outlined text-lg" data-icon="verified_user">verified_user</span>
+<p class="text-[10px] font-label tracking-widest uppercase">Secure checkout enabled</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-20 px-12 flex flex-col items-center gap-8 mt-40 bg-[#efeeec] dark:bg-[#141414] text-[#1a1a1a] dark:text-[#faf9f7] font-['Manrope'] text-xs tracking-widest uppercase">
+<div class="font-['Epilogue'] font-bold text-lg">VANGUARD ATELIER</div>
+<div class="flex flex-wrap justify-center gap-12 mb-4">
+<a class="opacity-50 hover:opacity-100 underline underline-offset-4 transition-all duration-400" href="#">PRIVACY</a>
+<a class="opacity-50 hover:opacity-100 underline underline-offset-4 transition-all duration-400" href="#">TERMS</a>
+<a class="opacity-50 hover:opacity-100 underline underline-offset-4 transition-all duration-400" href="#">SHIPPING</a>
+<a class="opacity-50 hover:opacity-100 underline underline-offset-4 transition-all duration-400" href="#">CONTACT</a>
+</div>
+<div class="opacity-50">© 2024 VANGUARD ATELIER. ALL RIGHTS RESERVED.</div>
+</footer>
+<!-- Mobile Bottom Navigation Shell -->
+<div class="fixed bottom-0 left-0 w-full flex justify-around items-center py-4 px-6 md:hidden bg-[#faf9f7]/90 dark:bg-[#1a1a1a]/90 backdrop-blur-2xl z-50 rounded-t-3xl shadow-[0_-8px_30px_rgba(0,0,0,0.04)]">
+<div class="flex flex-col items-center justify-center text-[#1a1a1a] dark:text-[#faf9f7] opacity-40 font-['Manrope'] text-[10px] uppercase tracking-[0.05rem] font-bold">
+<span class="material-symbols-outlined mb-1" data-icon="storefront">storefront</span>
+<span>Shop</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#1a1a1a] dark:text-[#faf9f7] opacity-40 font-['Manrope'] text-[10px] uppercase tracking-[0.05rem] font-bold">
+<span class="material-symbols-outlined mb-1" data-icon="search">search</span>
+<span>Search</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#7c5730] scale-110 font-['Manrope'] text-[10px] uppercase tracking-[0.05rem] font-bold">
+<span class="material-symbols-outlined mb-1" data-icon="shopping_bag">shopping_bag</span>
+<span>Bag</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#1a1a1a] dark:text-[#faf9f7] opacity-40 font-['Manrope'] text-[10px] uppercase tracking-[0.05rem] font-bold">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span>Profile</span>
+</div>
+</div>
+</body></html>

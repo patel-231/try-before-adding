@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-error": "#ffffff",
+              "tertiary-container": "#121e17",
+              "surface-container": "#efeeec",
+              "surface-container-low": "#f4f3f1",
+              "on-surface": "#1a1c1b",
+              "error-container": "#ffdad6",
+              "primary": "#000000",
+              "on-background": "#1a1c1b",
+              "on-secondary-fixed-variant": "#61401b",
+              "tertiary": "#000000",
+              "error": "#ba1a1a",
+              "secondary-container": "#fdcb9b",
+              "surface-container-high": "#e9e8e6",
+              "inverse-on-surface": "#f1f1ef",
+              "on-secondary-fixed": "#2c1600",
+              "surface-variant": "#e3e2e0",
+              "secondary": "#7c5730",
+              "on-primary-fixed": "#1c1b1b",
+              "on-tertiary-container": "#7a877d",
+              "surface": "#faf9f7",
+              "on-surface-variant": "#444748",
+              "tertiary-fixed-dim": "#bccabf",
+              "surface-container-lowest": "#ffffff",
+              "secondary-fixed": "#ffdcbd",
+              "outline-variant": "#c4c7c7",
+              "background": "#faf9f7",
+              "on-secondary": "#ffffff",
+              "primary-fixed": "#e5e2e1",
+              "on-tertiary": "#ffffff",
+              "on-error-container": "#93000a",
+              "primary-fixed-dim": "#c8c6c5",
+              "outline": "#747878",
+              "surface-bright": "#faf9f7",
+              "surface-dim": "#dadad8",
+              "secondary-fixed-dim": "#eebd8e",
+              "on-secondary-container": "#79542d",
+              "on-tertiary-fixed-variant": "#3d4a41",
+              "surface-tint": "#5f5e5e",
+              "primary-container": "#1c1b1b",
+              "surface-container-highest": "#e3e2e0",
+              "on-tertiary-fixed": "#121e17",
+              "inverse-surface": "#2f3130",
+              "inverse-primary": "#c8c6c5",
+              "tertiary-fixed": "#d8e6da",
+              "on-primary-container": "#858383",
+              "on-primary": "#ffffff",
+              "on-primary-fixed-variant": "#474746"
+            },
+            fontFamily: {
+              "headline": ["Epilogue"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#faf9f7]/80 backdrop-blur-xl shadow-[0_12px_40px_rgba(26,28,27,0.06)]">
+<div class="flex items-center justify-between px-6 h-16 w-full">
+<button class="text-[#1a1a1a] hover:opacity-70 transition-opacity duration-400 active:scale-95">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+<h1 class="text-xl font-bold tracking-[0.2em] text-[#1a1a1a] font-['Epilogue'] uppercase">THE ATELIER</h1>
+<button class="text-[#1a1a1a] hover:opacity-70 transition-opacity duration-400 active:scale-95">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-md mx-auto">
+<!-- Progress Indicator -->
+<div class="mb-12 flex items-center justify-between">
+<div class="flex flex-col items-start">
+<span class="font-label text-[10px] uppercase tracking-[0.1em] text-on-surface-variant mb-1">Step 03</span>
+<h2 class="font-headline text-2xl font-bold tracking-tight">Payment &amp; Review</h2>
+</div>
+<div class="flex gap-1">
+<div class="w-8 h-1 bg-primary"></div>
+<div class="w-8 h-1 bg-primary"></div>
+<div class="w-12 h-1 bg-primary"></div>
+</div>
+</div>
+<!-- Order Summary (Collapsible Style Editorial) -->
+<section class="mb-12">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-label text-xs uppercase tracking-[0.15em] font-semibold">Review Order</h3>
+<span class="text-xs text-secondary font-semibold">2 Items</span>
+</div>
+<div class="space-y-6">
+<!-- Item 1 -->
+<div class="flex gap-4 items-center">
+<div class="w-20 h-24 bg-surface-container overflow-hidden rounded-lg">
+<img alt="Luxury wool coat" class="w-full h-full object-cover" data-alt="Close-up of a high-end charcoal wool tailored coat against a soft cream background, editorial fashion photography style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBeaLiNf3yjkOZ9_jiSByIEbFiROWY2cAbDONcFdgNFAuflIMFVNnaX0m3hqImEnXiA4L0SKpwRkE18svSXdCEDXOO8cOJVvi6ATwNcv_un6FJDg3LcOb_wXm5HVNd_EAl1mJvQhTzoNjKQJbV91ukyQQXDXa9VC7eJ2yjKJ_EZTjJY1DKx002wuNhRYphOCt8ai2cdeislQcB-dk8nNM-TCou_5AqLzUfJ1-FOQyFZ1X5yACKWROlJqIF1le_WDbRloKNvJh7JNF5"/>
+</div>
+<div class="flex-1">
+<p class="font-headline text-sm font-bold uppercase tracking-tight">Sculpted Wool Overcoat</p>
+<p class="text-xs text-on-surface-variant mt-1">Size: M / Onyx Black</p>
+<p class="text-sm font-bold mt-2">$1,250.00</p>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex gap-4 items-center">
+<div class="w-20 h-24 bg-surface-container overflow-hidden rounded-lg">
+<img alt="Leather boots" class="w-full h-full object-cover" data-alt="Handcrafted minimalist leather chelsea boots with a subtle sheen, studio lighting on a neutral stone surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCikKV_XBeKN9s5zzY4mMorGmBZEGGlTBXFA8kFM36CRr5wV4RTarPOjyAQdkEFxDPo4GgWPzOtMA0ncWiFJVKc9D2a0BNTMqLsb5CgTk7TZUWyi0BFGjj23yZ53K89xOkhe9JQ6os_1CRGFJdgirp0BqTvQfbHM6YWf84Bm7nXs2i7PJC1gkhsI3AfASrWHfwA8vTTpr9LC7L4t6SD2bpwtIHBzMIGKq-vcpVDJ-1G99B8D1d4hD6ESBjayTSKDGeMApHIS1sCF4XD"/>
+</div>
+<div class="flex-1">
+<p class="font-headline text-sm font-bold uppercase tracking-tight">Hand-Stitched Chelsea</p>
+<p class="text-xs text-on-surface-variant mt-1">Size: 42 / Espresso</p>
+<p class="text-sm font-bold mt-2">$850.00</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Payment Details -->
+<section class="mb-12">
+<h3 class="font-label text-xs uppercase tracking-[0.15em] font-semibold mb-6">Payment Method</h3>
+<div class="space-y-6">
+<!-- Card Number -->
+<div class="space-y-2">
+<label class="font-label text-[10px] uppercase tracking-wider text-on-surface-variant ml-1">Card Number</label>
+<div class="relative group">
+<input class="w-full bg-surface-container-low border-none focus:ring-1 focus:ring-primary rounded px-4 py-4 font-label tracking-[0.2em] text-sm placeholder:text-outline-variant transition-colors" placeholder="0000 0000 0000 0000" type="text"/>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 flex gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-xl" data-icon="credit_card">credit_card</span>
+</div>
+</div>
+</div>
+<!-- Expiry and CVC -->
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="font-label text-[10px] uppercase tracking-wider text-on-surface-variant ml-1">Expiry Date</label>
+<input class="w-full bg-surface-container-low border-none focus:ring-1 focus:ring-primary rounded px-4 py-4 font-label tracking-widest text-sm placeholder:text-outline-variant" placeholder="MM/YY" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="font-label text-[10px] uppercase tracking-wider text-on-surface-variant ml-1">Security Code</label>
+<input class="w-full bg-surface-container-low border-none focus:ring-1 focus:ring-primary rounded px-4 py-4 font-label tracking-widest text-sm placeholder:text-outline-variant" placeholder="***" type="password"/>
+</div>
+</div>
+<!-- Billing Address Toggle -->
+<div class="flex items-center gap-3 py-2">
+<div class="w-5 h-5 border border-primary flex items-center justify-center rounded-sm">
+<span class="material-symbols-outlined text-sm" data-icon="check" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+<span class="text-xs text-on-surface-variant font-medium">Billing matches shipping address</span>
+</div>
+</div>
+</section>
+<!-- Total Calculation -->
+<section class="bg-surface-container-low p-6 rounded-lg mb-8">
+<div class="space-y-3">
+<div class="flex justify-between text-xs text-on-surface-variant">
+<span class="uppercase tracking-wider">Subtotal</span>
+<span>$2,100.00</span>
+</div>
+<div class="flex justify-between text-xs text-on-surface-variant">
+<span class="uppercase tracking-wider">Express Shipping</span>
+<span>$25.00</span>
+</div>
+<div class="flex justify-between text-xs text-on-surface-variant">
+<span class="uppercase tracking-wider">Estimated Tax</span>
+<span>$168.00</span>
+</div>
+<div class="h-px bg-outline-variant/20 my-4"></div>
+<div class="flex justify-between items-baseline">
+<span class="font-headline font-bold uppercase text-sm tracking-tighter">Total Due</span>
+<span class="font-headline font-extrabold text-xl tracking-tighter">$2,293.00</span>
+</div>
+</div>
+</section>
+<!-- Security Badge -->
+<div class="flex items-center justify-center gap-2 mb-12 opacity-40">
+<span class="material-symbols-outlined text-sm" data-icon="lock">lock</span>
+<span class="font-label text-[9px] uppercase tracking-[0.2em] font-bold">Encrypted Secure Payment</span>
+</div>
+</main>
+<!-- Fixed Action Bar -->
+<div class="fixed bottom-0 left-0 w-full bg-surface/90 backdrop-blur-xl px-6 pt-4 pb-8 z-50">
+<button class="w-full bg-primary text-on-primary py-5 rounded-sm font-headline font-extrabold text-sm uppercase tracking-[0.2em] shadow-[0_8px_30px_rgba(0,0,0,0.15)] active:scale-[0.98] transition-all duration-400 flex items-center justify-center gap-3">
+<span>Complete Order</span>
+<span class="material-symbols-outlined text-lg" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- Bottom Nav Bar (Hidden per transactional context but available for structure reference) -->
+<!-- Suppressed for transactional focus -->
+</body></html>

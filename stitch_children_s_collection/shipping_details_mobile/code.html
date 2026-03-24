@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-error": "#ffffff",
+              "tertiary-container": "#121e17",
+              "surface-container": "#efeeec",
+              "surface-container-low": "#f4f3f1",
+              "on-surface": "#1a1c1b",
+              "error-container": "#ffdad6",
+              "primary": "#000000",
+              "on-background": "#1a1c1b",
+              "on-secondary-fixed-variant": "#61401b",
+              "tertiary": "#000000",
+              "error": "#ba1a1a",
+              "secondary-container": "#fdcb9b",
+              "surface-container-high": "#e9e8e6",
+              "inverse-on-surface": "#f1f1ef",
+              "on-secondary-fixed": "#2c1600",
+              "surface-variant": "#e3e2e0",
+              "secondary": "#7c5730",
+              "on-primary-fixed": "#1c1b1b",
+              "on-tertiary-container": "#7a877d",
+              "surface": "#faf9f7",
+              "on-surface-variant": "#444748",
+              "tertiary-fixed-dim": "#bccabf",
+              "surface-container-lowest": "#ffffff",
+              "secondary-fixed": "#ffdcbd",
+              "outline-variant": "#c4c7c7",
+              "background": "#faf9f7",
+              "on-secondary": "#ffffff",
+              "primary-fixed": "#e5e2e1",
+              "on-tertiary": "#ffffff",
+              "on-error-container": "#93000a",
+              "primary-fixed-dim": "#c8c6c5",
+              "outline": "#747878",
+              "surface-bright": "#faf9f7",
+              "surface-dim": "#dadad8",
+              "secondary-fixed-dim": "#eebd8e",
+              "on-secondary-container": "#79542d",
+              "on-tertiary-fixed-variant": "#3d4a41",
+              "surface-tint": "#5f5e5e",
+              "primary-container": "#1c1b1b",
+              "surface-container-highest": "#e3e2e0",
+              "on-tertiary-fixed": "#121e17",
+              "inverse-surface": "#2f3130",
+              "inverse-primary": "#c8c6c5",
+              "tertiary-fixed": "#d8e6da",
+              "on-primary-container": "#858383",
+              "on-primary": "#ffffff",
+              "on-primary-fixed-variant": "#474746"
+            },
+            fontFamily: {
+              "headline": ["Epilogue"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#faf9f7]/80 dark:bg-[#1a1a1a]/80 backdrop-blur-xl shadow-[0_12px_40px_rgba(26,28,27,0.06)]">
+<div class="flex items-center justify-between px-6 h-16 w-full">
+<button class="hover:opacity-70 transition-opacity duration-400 scale-98 active:scale-95 transition-transform ease-out duration-400">
+<span class="material-symbols-outlined text-[#1a1a1a] dark:text-[#faf9f7]">close</span>
+</button>
+<h1 class="font-['Epilogue'] tracking-[0.2em] uppercase text-xl font-bold text-[#1a1a1a] dark:text-[#faf9f7]">THE ATELIER</h1>
+<button class="hover:opacity-70 transition-opacity duration-400 scale-98 active:scale-95 transition-transform ease-out duration-400">
+<span class="material-symbols-outlined text-[#1a1a1a] dark:text-[#faf9f7]">shopping_bag</span>
+</button>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-md mx-auto">
+<!-- Editorial Header -->
+<section class="mb-12">
+<span class="font-label text-[10px] uppercase tracking-[0.15em] text-secondary font-semibold mb-2 block">Step 02 of 03</span>
+<h2 class="font-headline text-3xl font-extrabold tracking-tighter text-primary leading-tight">SHIPPING DETAILS</h2>
+<p class="font-body text-sm text-on-surface-variant mt-2 leading-relaxed">Where should we send your curated pieces?</p>
+</section>
+<!-- Form Section -->
+<form class="space-y-10">
+<!-- Information Group -->
+<div class="space-y-6">
+<div class="relative">
+<label class="font-label text-xs uppercase tracking-wider text-on-surface-variant font-bold mb-2 block">Full Name</label>
+<input class="w-full bg-surface-container-low border-none rounded-none py-4 px-0 border-b border-outline-variant focus:ring-0 focus:border-primary transition-all duration-300 placeholder:text-surface-dim font-medium" placeholder="ALEXANDER VANGUARD" type="text"/>
+</div>
+<div class="relative">
+<label class="font-label text-xs uppercase tracking-wider text-on-surface-variant font-bold mb-2 block">Email Address</label>
+<input class="w-full bg-surface-container-low border-none rounded-none py-4 px-0 border-b border-outline-variant focus:ring-0 focus:border-primary transition-all duration-300 placeholder:text-surface-dim font-medium" placeholder="atelier@vanguard.com" type="email"/>
+</div>
+<div class="relative">
+<label class="font-label text-xs uppercase tracking-wider text-on-surface-variant font-bold mb-2 block">Street Address</label>
+<input class="w-full bg-surface-container-low border-none rounded-none py-4 px-0 border-b border-outline-variant focus:ring-0 focus:border-primary transition-all duration-300 placeholder:text-surface-dim font-medium" placeholder="124 AVENUE DES CHAMPS-ÉLYSÉES" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="relative">
+<label class="font-label text-xs uppercase tracking-wider text-on-surface-variant font-bold mb-2 block">City</label>
+<input class="w-full bg-surface-container-low border-none rounded-none py-4 px-0 border-b border-outline-variant focus:ring-0 focus:border-primary transition-all duration-300 placeholder:text-surface-dim font-medium" placeholder="PARIS" type="text"/>
+</div>
+<div class="relative">
+<label class="font-label text-xs uppercase tracking-wider text-on-surface-variant font-bold mb-2 block">Postal Code</label>
+<input class="w-full bg-surface-container-low border-none rounded-none py-4 px-0 border-b border-outline-variant focus:ring-0 focus:border-primary transition-all duration-300 placeholder:text-surface-dim font-medium" placeholder="75008" type="text"/>
+</div>
+</div>
+</div>
+<!-- Delivery Methods -->
+<section class="space-y-4 pt-4">
+<h3 class="font-label text-xs uppercase tracking-[0.2em] text-primary font-extrabold mb-6">Delivery Method</h3>
+<!-- Standard -->
+<label class="group block relative cursor-pointer">
+<input checked="" class="peer hidden" name="shipping" type="radio"/>
+<div class="p-5 bg-surface-container-lowest transition-all duration-400 group-hover:bg-surface-container-low peer-checked:bg-primary-container peer-checked:text-on-primary shadow-[0_4px_20px_rgba(0,0,0,0.02)] rounded-lg flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-headline text-sm font-bold tracking-tight">STANDARD ATELIER</span>
+<span class="font-body text-[11px] opacity-70">5-7 BUSINESS DAYS</span>
+</div>
+<span class="font-headline text-sm font-bold">COMPLIMENTARY</span>
+</div>
+</label>
+<!-- Express -->
+<label class="group block relative cursor-pointer">
+<input class="peer hidden" name="shipping" type="radio"/>
+<div class="p-5 bg-surface-container-lowest transition-all duration-400 group-hover:bg-surface-container-low peer-checked:bg-primary-container peer-checked:text-on-primary shadow-[0_4px_20px_rgba(0,0,0,0.02)] rounded-lg flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-headline text-sm font-bold tracking-tight">PRIORITY COURIER</span>
+<span class="font-body text-[11px] opacity-70">1-2 BUSINESS DAYS</span>
+</div>
+<span class="font-headline text-sm font-bold">€25.00</span>
+</div>
+</label>
+</section>
+<!-- Checkout Summary Card -->
+<div class="bg-surface-container p-6 rounded-lg space-y-4">
+<div class="flex justify-between items-center">
+<span class="font-body text-xs text-on-surface-variant uppercase tracking-widest">Subtotal</span>
+<span class="font-headline text-sm font-bold">€1,240.00</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body text-xs text-on-surface-variant uppercase tracking-widest">Shipping</span>
+<span class="font-headline text-sm font-bold">€0.00</span>
+</div>
+<div class="pt-4 border-t border-outline-variant/30 flex justify-between items-center">
+<span class="font-headline text-sm font-extrabold uppercase tracking-widest">Total</span>
+<span class="font-headline text-lg font-extrabold">€1,240.00</span>
+</div>
+</div>
+<!-- Action Button -->
+<button class="w-full bg-secondary text-on-secondary py-5 font-headline font-bold text-sm tracking-[0.2em] uppercase hover:opacity-90 transition-all duration-400 scale-100 active:scale-95 shadow-xl" type="submit">
+                PROCEED TO PAYMENT
+            </button>
+</form>
+<!-- Product Preview (Miniature Glass Card) -->
+<div class="mt-12 p-4 bg-surface-container-lowest/40 backdrop-blur-md rounded-xl border border-white/20 flex items-center gap-4">
+<div class="w-16 h-20 bg-surface-container-high rounded-lg overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up of a high-end tailored wool overcoat in charcoal grey hanging on a minimalist wooden hanger" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD35hFO6pEdINc14zQsYGWRD99SjFw0YU49aZ8STz7rFmAIlManQR7k0sTc6OzZymaLVjmj6DQlJ5DgwRuwOIhAeZtlxZuRn_8nv9thp2szRtNLZEFYOuRlem1uRyBWBBiwwq7ogM5ZDVFAZvu7LGmSQoQ0GnXKL84DzZukjmUZLHMVe60wYWumXIhfw7pMHD7MCjPkc8SBFf7MLauu7_3c347BZdgaQ36n1_J7dKUf58v16Y4g7MW74kxwCf57A4FuD3XXPGQfr1W9"/>
+</div>
+<div>
+<p class="font-headline text-[11px] font-bold tracking-wider uppercase">Heritage Wool Coat</p>
+<p class="font-body text-[10px] text-on-surface-variant">Size: 48 / Charcoal</p>
+<p class="font-headline text-xs font-bold mt-1">€1,240.00</p>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Hidden on transactional pages as per rules, but included if user logic overrides) -->
+<!-- Suppressed for transactional focus -->
+<!-- Mobile Navigation Mock Overlay (Only for demonstration if needed) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#ffffff]/80 dark:bg-[#1a1b1b]/80 backdrop-blur-xl z-50 shadow-[0_-8px_30px_rgba(0,0,0,0.04)] rounded-t-xl opacity-0 pointer-events-none">
+<div class="flex flex-col items-center justify-center text-[#dadad8] dark:text-[#efeeec]">
+<span class="material-symbols-outlined mb-1">grid_view</span>
+<span class="font-['Manrope'] text-[10px] uppercase tracking-[0.05rem] font-semibold">Shop</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#dadad8] dark:text-[#efeeec]">
+<span class="material-symbols-outlined mb-1">search</span>
+<span class="font-['Manrope'] text-[10px] uppercase tracking-[0.05rem] font-semibold">Search</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#1a1a1a] dark:text-[#faf9f7] scale-105">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">shopping_bag</span>
+<span class="font-['Manrope'] text-[10px] uppercase tracking-[0.05rem] font-semibold">Bag</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#dadad8] dark:text-[#efeeec]">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-['Manrope'] text-[10px] uppercase tracking-[0.05rem] font-semibold">Profile</span>
+</div>
+</nav>
+</body></html>
