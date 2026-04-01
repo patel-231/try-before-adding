@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>3D City: Realistic Roads & Collisions</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: #a4c6d8; touch-action: none; font-family: sans-serif; }
+        #ui { position: absolute; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+        #joystick-base {
+            position: absolute; bottom: 50px; left: 50px;
+            width: 80px; height: 80px; background: rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.2); border-radius: 50%;
+            pointer-events: auto;
+        }
+        #joystick-knob {
+            position: absolute; top: 20px; left: 20px;
+            width: 40px; height: 40px; background: #fff;
+            border-radius: 50%; opacity: 0.7;
+        }
+        .instructions {
+            position: absolute; top: 10px; width: 100%; text-align: center;
+            color: #2c3e50; pointer-events: none; text-shadow: 0 1px 2px white;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="ui">
+        <div class="instructions">Joystick (Left) to Move | Swipe (Right) to Look</div>
+        <div id="joystick-base"><div id="joystick-knob"></div></div>
+    </div>
+
+    <script type="importmap">
+        { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+
+        // --- SCENE SETUP ---
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xdbe9f4);
+        scene.fog = new THREE.FogExp2(0xdbe9f4, 0.0015);
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+        camera.position.set(0, 3, 10);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true;
+        document.body.appendChild(renderer.domElement);
+
+        // --- LIGHTING ---
+        scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 1.2));
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
+        dirLight.position.set(-50, 100, 50);
+        dirLight.castShadow = true;
+        scene.add(dirLight);
+
+        // --- COLLISION DATA ---
+        const buildings = [];
+
+        // --- TEXTURE GENERATORS ---
+        function createRoadTexture() {
+            const size = 1024;
+            const canvas = document.createElement('canvas');
+            canvas.width = canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = '#222222';
+            ctx.fillRect(0, 0, size, size);
+
+            for (let i = 0; i < 50000; i++) {
+                const x = Math.random() * size;
+                const y = Math.random() * size;
+                const color = Math.random() * 30 + 20;
+                ctx.fillStyle = `rgb(${color},${color},${color})`;
+                ctx.fillRect(x, y, 1.5, 1.5);
+            }
+
+            for (let i = 0; i < 20; i++) {
+                const x = Math.random() * size;
+                const y = Math.random() * size;
+                const rad = Math.random() * 50 + 20;
+                const grd = ctx.createRadialGradient(x, y, 0, x, y, rad);
+                grd.addColorStop(0, 'rgba(0,0,0,0.3)');
+                grd.addColorStop(1, 'transparent');
+                ctx.fillStyle = grd;
+                ctx.fillRect(x - rad, y - rad, rad * 2, rad * 2);
+            }
+
+            ctx.strokeStyle = '#f1c40f';
+            ctx.lineWidth = 12;
+            ctx.beginPath();
+            ctx.moveTo(size / 2 - 10, 0); ctx.lineTo(size / 2 - 10, size);
+            ctx.moveTo(size / 2 + 10, 0); ctx.lineTo(size / 2 + 10, size);
+            ctx.stroke();
+
+            ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+            ctx.setLineDash([40, 40]);
+            ctx.lineWidth = 6;
+            ctx.beginPath();
+            ctx.moveTo(size * 0.1, 0); ctx.lineTo(size * 0.1, size);
+            ctx.moveTo(size * 0.9, 0); ctx.lineTo(size * 0.9, size);
+            ctx.stroke();
+
+            const tex = new THREE.CanvasTexture(canvas);
+            tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+            tex.repeat.set(50, 50); 
+            tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+            return tex;
+        }
+
+        function createTextCanvas(text) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512; canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'rgba(0,0,0,0.8)';
+            ctx.fillRect(0, 0, 512, 128);
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 80px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(text, 256, 90);
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        function createWindowTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 128; canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.fillRect(0, 0, 128, 128);
+            ctx.fillStyle = '#ffffff'; ctx.fillRect(10, 10, 108, 108);
+            const tex = new THREE.CanvasTexture(canvas);
+            tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+            return tex;
+        }
+
+        const winTex = createWindowTexture();
+
+        // --- GROUND (ROAD) ---
+        const roadMaterial = new THREE.MeshPhongMaterial({ 
+            map: createRoadTexture(),
+            shininess: 10 
+        });
+        const ground = new THREE.Mesh(new THREE.PlaneGeometry(3000, 3000), roadMaterial);
+        ground.rotation.x = -Math.PI / 2;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        // --- CITY BUILDER ---
+        const buildingNames = ["SKYLINE", "VERTEX", "NEXUS", "ZENITH", "CORE", "APEX", "TITAN", "ORBIT"];
+        
+        const buildCity = () => {
+            const colors = [0x34495e, 0xe74c3c, 0x95a5a6, 0xecf0f1, 0xd35400, 0x2c3e50];
+            const size = 12;
+            const step = 70;
+            
+            for (let x = -size; x < size; x++) {
+                for (let z = -size; z < size; z++) {
+                    if (Math.random() > 0.6 || (Math.abs(x) < 1 && Math.abs(z) < 1)) continue;
+
+                    const posX = x * step + (Math.random() * 10 - 5);
+                    const posZ = z * step + (Math.random() * 10 - 5);
+                    const w = 25 + Math.random() * 10;
+                    const h = 40 + Math.random() * 100;
+                    const d = 25 + Math.random() * 10;
+
+                    const bCol = colors[Math.floor(Math.random() * colors.length)];
+                    const building = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), new THREE.MeshPhongMaterial({ color: bCol }));
+                    building.position.set(posX, h/2, posZ);
+                    building.castShadow = true;
+                    scene.add(building);
+
+                    const wTex = winTex.clone();
+                    wTex.repeat.set(Math.floor(w/5), Math.floor(h/6));
+                    const winMat = new THREE.MeshPhongMaterial({ map: wTex, color: 0x88ccff, transparent: true, opacity: 0.4 });
+                    const windows = new THREE.Mesh(new THREE.BoxGeometry(w+0.4, h-2, d+0.4), winMat);
+                    windows.position.copy(building.position);
+                    scene.add(windows);
+
+                    const nameText = buildingNames[Math.floor(Math.random() * buildingNames.length)] + "-" + Math.floor(Math.random()*99);
+                    const labelTex = createTextCanvas(nameText);
+                    const labelMat = new THREE.MeshBasicMaterial({ map: labelTex, transparent: true });
+
+                    for(let i=0; i<4; i++) {
+                        const labelPlane = new THREE.Mesh(new THREE.PlaneGeometry(w*0.7, w*0.18), labelMat);
+                        const angle = i * (Math.PI/2);
+                        labelPlane.position.set(
+                            posX + Math.sin(angle) * (i%2===0?0:w/2+0.5), 
+                            h - 6, 
+                            posZ + Math.cos(angle) * (i%2===0?d/2+0.5:0)
+                        );
+                        labelPlane.rotation.y = angle;
+                        scene.add(labelPlane);
+                    }
+
+                    buildings.push({
+                        minX: posX - w/2 - 2, maxX: posX + w/2 + 2,
+                        minZ: posZ - d/2 - 2, maxZ: posZ + d/2 + 2
+                    });
+                }
+            }
+        };
+        buildCity();
+
+        // --- CONTROLS ---
+        let moveData = { x: 0, y: 0 };
+        let rotation = { x: 0, y: 0 };
+        const knob = document.getElementById('joystick-knob');
+        const base = document.getElementById('joystick-base');
+
+        base.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const t = e.touches[0];
+            const r = base.getBoundingClientRect();
+            const dx = t.clientX - (r.left + 40);
+            const dy = t.clientY - (r.top + 40);
+            const dist = Math.min(Math.sqrt(dx*dx + dy*dy), 30);
+            const angle = Math.atan2(dy, dx);
+            moveData = { x: (Math.cos(angle) * dist) / 30, y: (Math.sin(angle) * dist) / 30 };
+            knob.style.transform = `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px)`;
+        }, { passive: false });
+
+        base.addEventListener('touchend', () => {
+            knob.style.transform = `translate(0,0)`;
+            moveData = { x: 0, y: 0 };
+        });
+
+        let lastX, lastY;
+        window.addEventListener('touchstart', (e) => { 
+            if(e.touches[0].clientX > window.innerWidth/2) { 
+                lastX = e.touches[0].clientX; 
+                lastY = e.touches[0].clientY; 
+            } 
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            const t = e.touches[0];
+            if(t.clientX > window.innerWidth/2) {
+                rotation.y -= (t.clientX - lastX) * 0.005;
+                rotation.x = Math.max(-0.6, Math.min(0.6, rotation.x - (t.clientY - lastY) * 0.005));
+                lastX = t.clientX; lastY = t.clientY;
+            }
+        });
+
+        function checkCollision(newPos) {
+            for (let b of buildings) {
+                if (newPos.x > b.minX && newPos.x < b.maxX && newPos.z > b.minZ && newPos.z < b.maxZ) return true;
+            }
+            return false;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            camera.rotation.order = 'YXZ';
+            camera.rotation.y = rotation.y;
+            camera.rotation.x = rotation.x;
+
+            if (moveData.x !== 0 || moveData.y !== 0) {
+                const moveSpeed = 1.0;
+                const oldPos = camera.position.clone();
+                camera.translateZ(moveData.y * moveSpeed);
+                camera.translateX(moveData.x * moveSpeed);
+                if (checkCollision(camera.position)) camera.position.copy(oldPos);
+                camera.position.y = 3;
+            }
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+    </script>
+</body>
+</html>

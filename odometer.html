@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Circle Halo Dashboard</title>
+    <style>
+        body {
+            background-color: #030303;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+        .container { text-align: center; }
+        canvas { filter: drop-shadow(0px 0px 60px rgba(0, 0, 0, 0.9)); }
+        .ui-hint { color: #1a1a1a; margin-top: 20px; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; }
+        kbd { border: 1px solid #111; padding: 2px 6px; color: #333; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <canvas id="gaugeCanvas" width="1000" height="500"></canvas>
+    <div class="ui-hint">
+        Hold <kbd>SPACE</kbd> for Throttle | Use <kbd>S</kbd> / <kbd>↓</kbd> for Brake
+    </div>
+</div>
+
+<script>
+const canvas = document.getElementById('gaugeCanvas');
+const ctx = canvas.getContext('2d');
+
+let speed = 0;
+let rpm = 0;
+const keys = {};
+
+window.addEventListener('keydown', e => keys[e.code] = true);
+window.addEventListener('keyup', e => keys[e.code] = false);
+
+// Blends current color to Red as it approaches 100%
+function getHotColor(percent, baseRGB) {
+    if (percent < 0.7) return `rgb(${baseRGB.r}, ${baseRGB.g}, ${baseRGB.b})`;
+    const ratio = (percent - 0.7) / 0.3; // Transition over the last 30%
+    const r = Math.floor(baseRGB.r * (1 - ratio) + 255 * ratio);
+    const g = Math.floor(baseRGB.g * (1 - ratio) + 20 * ratio);
+    const b = Math.floor(baseRGB.b * (1 - ratio) + 0 * ratio);
+    return `rgb(${r}, ${g}, ${b})`;
+}
+
+function drawGauge(x, y, radius, value, maxValue, label, baseRGB) {
+    const percent = value / maxValue;
+    const hotColor = getHotColor(percent, baseRGB);
+    const rgbStr = hotColor.match(/\d+/g).join(',');
+    
+    // Angles: Start at 8 o'clock, End at 4 o'clock
+    const startAngle = 0.8 * Math.PI;
+    const endAngle = 2.2 * Math.PI;
+    const currentAngle = startAngle + (percent * (endAngle - startAngle));
+
+    // --- 1. FULL CIRCLE HALO GLOW (The new requested effect) ---
+    // We create a radial gradient that spans the entire ring
+    const haloRadiusInner = radius - 55;
+    const haloRadiusOuter = radius + 15;
+    const grad = ctx.createRadialGradient(x, y, haloRadiusInner, x, y, haloRadiusOuter);
+    
+    grad.addColorStop(0, `rgba(${rgbStr}, 0)`);    // Center of ring transparent
+    grad.addColorStop(0.6, `rgba(${rgbStr}, 0.2)`); // Mid-faint aura
+    grad.addColorStop(1, `rgba(${rgbStr}, 0.7)`);   // Edge full vivid halo
+
+    ctx.save();
+    ctx.beginPath();
+    // Fill the ENTIRE circular path of the gauge
+    ctx.arc(x, y, haloRadiusOuter, startAngle, endAngle);
+    ctx.arc(x, y, haloRadiusInner, endAngle, startAngle, true); // Reverse inner arc
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+    ctx.restore();
+
+    // --- 2. THE MAIN TRACK (Dark Background Rail) ---
+    ctx.beginPath();
+    ctx.arc(x, y, radius, startAngle, endAngle);
+    ctx.strokeStyle = "#0a0a0a";
+    ctx.lineWidth = 22;
+    ctx.lineCap = "round";
+    ctx.stroke();
+
+    // --- 3. THE ACTIVE PROGRESS ARC ---
+    ctx.beginPath();
+    ctx.arc(x, y, radius, startAngle, currentAngle);
+    ctx.strokeStyle = hotColor;
+    ctx.lineWidth = 22;
+    ctx.lineCap = "round";
+    // Extra glow if near max
+    if(percent > 0.85) {
+        ctx.shadowBlur = 35;
+        ctx.shadowColor = hotColor;
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // --- 4. THE TICKS (High Detail) ---
+    for (let i = 0; i <= 40; i++) {
+        const angle = startAngle + (i / 40) * (endAngle - startAngle);
+        const isMajor = i % 4 === 0;
+        const tickIn = radius - (isMajor ? 12 : 20);
+        const tickOut = radius - 24;
+        
+        ctx.beginPath();
+        ctx.moveTo(x + Math.cos(angle) * tickIn, y + Math.sin(angle) * tickIn);
+        ctx.lineTo(x + Math.cos(angle) * tickOut, y + Math.sin(angle) * tickOut);
+        // Ticks are grey, last 8 become permanent red
+        ctx.strokeStyle = (i > 32) ? "#ff3300" : (isMajor ? "#3a3a3a" : "#1a1a1a");
+        ctx.lineWidth = isMajor ? 3 : 1;
+        ctx.stroke();
+    }
+
+    // --- 5. DIGITAL MEASUREMENT (Positioned in the bottom gap) ---
+    const textY = y + radius * 0.8;
+    ctx.textAlign = "center";
+    ctx.fillStyle = hotColor;
+    ctx.font = "900 58px monospace";
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = hotColor;
+    ctx.fillText(Math.floor(value), x, textY);
+    ctx.shadowBlur = 0;
+
+    ctx.font = "bold 13px sans-serif";
+    ctx.fillStyle = "#222";
+    ctx.fillText(label, x, textY + 22);
+
+    // --- 6. TAPERED NEEDLE (Sleek Tapered Design) ---
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(currentAngle);
+    
+    // Needle Shape
+    ctx.beginPath();
+    ctx.moveTo(-30, 0);
+    ctx.lineTo(0, -5);
+    ctx.lineTo(radius - 10, 0); // Needle Tip
+    ctx.lineTo(0, 5);
+    ctx.closePath();
+    ctx.fillStyle = hotColor;
+    ctx.fill();
+    ctx.restore();
+
+    // --- 7. CENTER PIN ---
+    ctx.beginPath();
+    ctx.arc(x, y, 16, 0, Math.PI * 2);
+    ctx.fillStyle = "#050505";
+    ctx.fill();
+    ctx.strokeStyle = "#111";
+    ctx.lineWidth = 4;
+    ctx.stroke();
+}
+
+function animate() {
+    // Shared Accelerator
+    if (keys['Space']) {
+        speed = Math.min(speed + 1.6, 280); 
+        rpm = Math.min(rpm + 120, 9000);
+    } else {
+        speed = Math.max(speed - 0.4, 0);
+        rpm = Math.max(rpm - 60, 0);
+    }
+    
+    // Independent Braking
+    if (keys['KeyS']) speed = Math.max(speed - 3.5, 0);
+    if (keys['ArrowDown']) rpm = Math.max(rpm - 200, 0);
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw Speedometer (Cyan Base)
+    drawGauge(280, 220, 180, speed, 280, "KM/H", {r: 0, g: 210, b: 255});
+    
+    // Draw Tachometer (Orange Base)
+    drawGauge(720, 220, 180, rpm, 9000, "RPM", {r: 255, g: 150, b: 0});
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+</script>
+</body>
+</html>
