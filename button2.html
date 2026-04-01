@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pro Car Control System - Advanced Gear & Lights</title>
+    <style>
+        :root {
+            --btn-bg: rgba(255, 255, 255, 0.12);
+            --btn-active: rgba(255, 255, 255, 0.5);
+            --accent-red: rgba(255, 50, 50, 0.4);
+            --accent-green: rgba(50, 255, 50, 0.4);
+            --accent-yellow: rgba(255, 200, 50, 0.4);
+            --text: rgba(255, 255, 255, 0.9);
+            --panel-bg: rgba(0, 0, 0, 0.85);
+            --gear-active: rgba(100, 200, 255, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #111;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            touch-action: none; 
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* --- 3D SCENE CONTAINER --- */
+        #3dScene {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* --- TOP LEFT CONTROLS --- */
+        .top-left-container {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .engine-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid #ff4444;
+            background: rgba(40, 0, 0, 0.8);
+            color: #ff4444;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: all 0.15s;
+            cursor: pointer;
+        }
+
+        .engine-active { 
+            background: #ff4444 !important; 
+            color: white !important; 
+            box-shadow: 0 0 30px #ff4444, inset 0 0 10px rgba(255,68,68,0.5);
+        }
+
+        /* --- GEAR SYSTEM PANEL --- */
+        .gear-panel-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .gear-main-btn {
+            width: 55px;
+            height: 55px;
+            background: rgba(100, 100, 150, 0.4);
+            border: 2px solid rgba(100, 200, 255, 0.6);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .gear-main-btn:active {
+            transform: scale(0.95);
+        }
+
+        .gear-drawer {
+            display: none;
+            background: var(--panel-bg);
+            padding: 12px;
+            border-radius: 12px;
+            border: 2px solid rgba(100, 200, 255, 0.4);
+            grid-template-columns: repeat(2, 45px);
+            grid-template-rows: auto;
+            gap: 8px;
+            justify-items: center;
+        }
+
+        .gear-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            font-size: 13px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+
+        .gear-btn:active {
+            transform: scale(0.92);
+        }
+
+        .gear-btn.active { 
+            background: var(--gear-active) !important; 
+            border-color: #64c8ff; 
+            box-shadow: 0 0 15px rgba(100, 200, 255, 0.6);
+            color: white;
+        }
+
+        .gear-info {
+            grid-column: 1 / -1;
+            text-align: center;
+            font-size: 10px;
+            color: rgba(255,255,255,0.6);
+            margin-top: 4px;
+        }
+
+        /* --- LIGHT SYSTEM PANEL --- */
+        .light-system-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .main-light-btn {
+            width: 55px;
+            height: 55px;
+            background: rgba(150, 100, 50, 0.4);
+            border: 2px solid rgba(255, 200, 100, 0.6);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .main-light-btn:active {
+            transform: scale(0.95);
+        }
+
+        .light-drawer {
+            display: none;
+            background: var(--panel-bg);
+            padding: 12px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 200, 100, 0.4);
+            grid-template-columns: repeat(2, 50px);
+            grid-template-rows: auto;
+            gap: 8px;
+            justify-items: center;
+        }
+
+        .light-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.1s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .light-btn:active {
+            transform: scale(0.92);
+        }
+
+        .light-btn.light-active {
+            background: rgba(255, 200, 100, 0.7) !important;
+            border-color: #ffc864;
+            box-shadow: 0 0 20px rgba(255, 200, 100, 0.8);
+        }
+
+        .light-btn.headlight-active {
+            background: rgba(255, 240, 100, 0.8) !important;
+            box-shadow: 0 0 25px rgba(255, 240, 100, 0.9);
+        }
+
+        .light-btn.brake-active {
+            background: rgba(255, 80, 80, 0.8) !important;
+            box-shadow: 0 0 25px rgba(255, 80, 80, 0.9);
+        }
+
+        .light-btn.hazard-active {
+            animation: hazardFlash 0.5s infinite;
+            background: rgba(255, 100, 50, 0.8) !important;
+        }
+
+        @keyframes hazardFlash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .light-indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: transparent;
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            transition: all 0.1s;
+        }
+
+        .light-btn.light-active .light-indicator {
+            background: #00ff00;
+            box-shadow: 0 0 8px #00ff00;
+        }
+
+        .light-label {
+            font-size: 8px;
+            line-height: 1;
+        }
+
+        /* --- CLUTCH STATUS --- */
+        .clutch-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--panel-bg);
+            border: 2px solid rgba(255, 100, 100, 0.5);
+            border-radius: 8px;
+            padding: 10px 15px;
+            color: rgba(255, 100, 100, 0.8);
+            font-size: 11px;
+            z-index: 100;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .clutch-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff6464;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* --- BOTTOM CONTROLS --- */
+        .bottom-ui {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 100;
+        }
+
+        .group { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px; 
+        }
+
+        .row { 
+            display: flex; 
+            gap: 8px; 
+            align-items: flex-end; 
+        }
+
+        .btn {
+            background: var(--btn-bg);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: var(--text);
+            border-radius: 8px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.05s;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+        }
+
+        .btn.is-pressed {
+            background: var(--btn-active) !important;
+            transform: scale(0.95);
+        }
+
+        .sz-gear { width: 50px; height: 50px; font-size: 20px; }
+        .sz-steer { width: 70px; height: 70px; font-size: 28px; }
+
+        .odo {
+            width: 110px;
+            background: rgba(0,0,0,0.8);
+            border: 2px solid rgba(0, 255, 200, 0.3);
+            border-radius: 8px;
+            text-align: center;
+            padding: 12px;
+            margin-bottom: 5px;
+        }
+
+        .speed { 
+            color: #00ffcc; 
+            font-size: 28px; 
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .speed-label {
+            font-size: 10px;
+            color: rgba(0, 255, 200, 0.7);
+            margin-top: 4px;
+        }
+
+        .pedal { 
+            width: 65px; 
+            font-size: 11px; 
+            background: var(--btn-bg);
+        }
+
+        .clt { 
+            height: 80px;
+            background: rgba(150, 100, 50, 0.3);
+            border-color: rgba(255, 200, 100, 0.5);
+        }
+
+        .brk { 
+            height: 110px; 
+            background: var(--accent-red);
+        }
+
+        .gas { 
+            height: 140px; 
+            background: var(--accent-green);
+        }
+
+        .hbk { 
+            height: 40px; 
+            font-size: 10px; 
+            width: 65px;
+            background: var(--accent-yellow);
+        }
+
+        .indicator { 
+            height: 40px; 
+            width: 35px; 
+            font-size: 10px;
+            background: var(--accent-yellow);
+        }
+
+        .indicator.active {
+            background: rgba(255, 200, 50, 0.8) !important;
+            box-shadow: 0 0 12px rgba(255, 200, 50, 0.6);
+            animation: blinkIndicator 0.6s infinite;
+        }
+
+        @keyframes blinkIndicator {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* --- STATUS DISPLAY --- */
+        .status-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--panel-bg);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 8px 15px;
+            color: rgba(255,255,255,0.7);
+            font-size: 10px;
+            z-index: 100;
+            display: none;
+        }
+
+        .status-panel.active {
+            display: block;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-height: 600px) {
+            .sz-steer { width: 60px; height: 60px; font-size: 24px; }
+            .gas { height: 100px; }
+            .pedal { width: 55px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 3D Scene for BMW and City -->
+    <div id="3dScene"></div>
+
+    <!-- CLUTCH INDICATOR -->
+    <div class="clutch-indicator">
+        <div style="font-size: 9px; color: rgba(255,255,255,0.6); margin-bottom: 4px;">CLUTCH</div>
+        <div class="clutch-value" id="clutchValue">0%</div>
+    </div>
+
+    <!-- TOP LEFT CONTROLS -->
+    <div class="top-left-container">
+        <!-- ENGINE START BUTTON -->
+        <div class="engine-btn" id="engineBtn">ENGINE<br>START</div>
+
+        <!-- GEAR SYSTEM -->
+        <div class="gear-panel-wrapper">
+            <div class="gear-main-btn" id="gearToggle">⚙️</div>
+            <div class="gear-drawer" id="gearDrawer">
+                <div class="gear-btn" data-gear="P">P</div>
+                <div class="gear-btn" data-gear="R">R</div>
+                <div class="gear-btn" data-gear="N">N</div>
+                <div class="gear-btn" data-gear="D">D</div>
+                <div class="gear-btn" data-gear="S">S</div>
+                <div class="gear-btn" data-gear="L">L</div>
+                <div class="gear-info" id="gearInfo">Park Selected</div>
+            </div>
+        </div>
+
+        <!-- LIGHT SYSTEM -->
+        <div class="light-system-wrapper">
+            <div class="main-light-btn" id="lightToggle">💡</div>
+            <div class="light-drawer" id="lightDrawer">
+                <div class="light-btn" data-light="headlight" id="headlightBtn">
+                    <div class="light-indicator"></div>
+                    <div class="light-label">HEAD</div>
+                </div>
+                <div class="light-btn" data-light="sidelight" id="sidelightBtn">
+                    <div class="light-indicator"></div>
+                    <div class="light-label">SIDE</div>
+                </div>
+                <div class="light-btn" data-light="brake" id="brakeBtn">
+                    <div class="light-indicator"></div>
+                    <div class="light-label">BRAKE</div>
+                </div>
+                <div class="light-btn" data-light="hazard" id="hazardBtn">
+                    <div class="light-indicator"></div>
+                    <div class="light-label">HZD</div>
+                </div>
+                <div style="grid-column: 1 / -1; text-align: center; font-size: 8px; color: rgba(255,255,255,0.5); margin-top: 2px;">
+                    LIGHT SYSTEM
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM CONTROLS -->
+    <div class="bottom-ui">
+        <!-- LEFT: GEAR & STEERING -->
+        <div class="group">
+            <div class="row">
+                <div class="btn sz-gear" data-key="gear_up">+</div>
+                <div class="btn sz-gear" data-key="gear_down">-</div>
+            </div>
+            <div class="row">
+                <div class="btn sz-steer" data-key="left">←</div>
+                <div class="btn sz-steer" data-key="right">→</div>
+            </div>
+        </div>
+
+        <!-- CENTER: SPEEDOMETER -->
+        <div class="odo">
+            <div class="speed" id="speedDisp">000</div>
+            <div class="speed-label">KM/H</div>
+        </div>
+
+        <!-- RIGHT: PEDALS & LIGHTS -->
+        <div class="row">
+            <div class="btn pedal clt" data-key="clutch">CLT</div>
+            <div class="group">
+                <div class="btn hbk" data-key="handbrake">HBK</div>
+                <div class="btn pedal brk" data-key="brake">BRK</div>
+            </div>
+            <div class="group">
+                <div style="display:flex; gap:4px">
+                    <div class="btn indicator" data-toggle="left-indicator" id="leftIndicator">◄</div>
+                    <div class="btn indicator" data-toggle="right-indicator" id="rightIndicator">►</div>
+                </div>
+                <div class="btn pedal gas" data-key="accel">GAS</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STATUS PANEL (Hidden by default) -->
+    <div class="status-panel" id="statusPanel"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // ============================================
+        // GLOBAL STATE MANAGEMENT
+        // ============================================
+        const gameState = {
+            engine: false,
+            currentGear: 'P',
+            speed: 0,
+            maxSpeed: 200,
+            acceleration: 0,
+            steering: 0,
+            clutch: 0,
+            brake: 0,
+            throttle: 0,
+            handbrake: false,
+            lights: {
+                headlight: false,
+                sidelight: false,
+                brake: false,
+                hazard: false,
+            },
+            indicators: {
+                left: false,
+                right: false,
+            }
+        };
+
+        const inputState = {
+            accel: false,
+            brake: false,
+            clutch: false,
+            left: false,
+            right: false,
+            handbrake: false,
+        };
+
+        // ============================================
+        // 3D SCENE SETUP
+        // ============================================
+        let scene, camera, renderer, bmwModel, cityModel, lights = [];
+
+        function init3DScene() {
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a2e);
+            scene.fog = new THREE.Fog(0x1a1a2e, 500, 2000);
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(
+                75,
+                window.innerWidth / window.innerHeight,
+                0.1,
+                10000
+            );
+            camera.position.set(0, 10, 30);
+            camera.lookAt(0, 0, 0);
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFShadowShadowMap;
+            document.getElementById('3dScene').appendChild(renderer.domElement);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(100, 100, 50);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
+            directionalLight.shadow.camera.far = 1000;
+            scene.add(directionalLight);
+
+            // Add car headlights (will be dynamic)
+            const carHeadlight = new THREE.SpotLight(0xffff99, 1);
+            carHeadlight.position.set(0, 5, 15);
+            carHeadlight.target.position.set(0, 0, -100);
+            carHeadlight.castShadow = true;
+            carHeadlight.visible = false;
+            lights.push({ type: 'headlight', light: carHeadlight });
+            scene.add(carHeadlight);
+            scene.add(carHeadlight.target);
+
+            // Add hazard lights
+            const hazardLightLeft = new THREE.PointLight(0xff6400, 0);
+            hazardLightLeft.position.set(-5, 2, 0);
+            scene.add(hazardLightLeft);
+            lights.push({ type: 'hazard-left', light: hazardLightLeft });
+
+            const hazardLightRight = new THREE.PointLight(0xff6400, 0);
+            hazardLightRight.position.set(5, 2, 0);
+            scene.add(hazardLightRight);
+            lights.push({ type: 'hazard-right', light: hazardLightRight });
+
+            // Load 3D Models
+            loadModels();
+
+            // Ground plane
+            const groundGeometry = new THREE.PlaneGeometry(1000, 1000);
+            const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x2a2a3e });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.receiveShadow = true;
+            scene.add(ground);
+
+            window.addEventListener('resize', onWindowResize);
+            animate();
+        }
+
+        function loadModels() {
+            const loader = new THREE.GLTFLoader();
+
+            // Load BMW
+            loader.load('/mnt/user-data/uploads/bmw.glb', (gltf) => {
+                bmwModel = gltf.scene;
+                bmwModel.position.set(0, 0, 0);
+                bmwModel.scale.set(1, 1, 1);
+                bmwModel.traverse((node) => {
+                    if (node.isMesh) {
+                        node.castShadow = true;
+                        node.receiveShadow = true;
+                    }
+                });
+                scene.add(bmwModel);
+            });
+
+            // Load City
+            loader.load('/mnt/user-data/uploads/city.html', (gltf) => {
+                cityModel = gltf.scene;
+                cityModel.position.set(200, -20, 0);
+                cityModel.scale.set(1, 1, 1);
+                scene.add(cityModel);
+            });
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            updateCarPhysics();
+            updateLights();
+            renderer.render(scene, camera);
+        }
+
+        function updateLights() {
+            lights.forEach(light => {
+                if (light.type === 'headlight') {
+                    light.light.visible = gameState.lights.headlight;
+                    if (gameState.lights.headlight) {
+                        light.light.intensity = 1.2;
+                    }
+                } else if (light.type.includes('hazard')) {
+                    if (gameState.lights.hazard) {
+                        const intensity = Math.sin(Date.now() * 0.005) > 0 ? 1.5 : 0;
+                        light.light.intensity = intensity;
+                    } else {
+                        light.light.intensity = 0;
+                    }
+                }
+            });
+        }
+
+        // ============================================
+        // REALISTIC CAR PHYSICS
+        // ============================================
+        function updateCarPhysics() {
+            if (!gameState.engine) {
+                gameState.speed *= 0.98;
+                gameState.throttle = 0;
+                return;
+            }
+
+            // Gear-based power delivery
+            const gearPowerMap = {
+                'P': 0,
+                'R': { maxSpeed: 60, acceleration: 0.8 },
+                'N': 0,
+                'D': { maxSpeed: 200, acceleration: 1.5 },
+                'S': { maxSpeed: 220, acceleration: 2.0 },
+                'L': { maxSpeed: 80, acceleration: 2.5 },
+            };
+
+            const currentGearData = gearPowerMap[gameState.currentGear];
+            
+            if (!currentGearData) {
+                gameState.speed *= 0.97;
+                return;
+            }
+
+            // Clutch effect: if clutch > 0.2, engine power is reduced
+            const clutchMultiplier = gameState.clutch > 0.2 ? 0 : (1 - gameState.clutch);
+
+            // Acceleration with clutch consideration
+            if (inputState.accel && clutchMultiplier > 0) {
+                const accelForce = currentGearData.acceleration * inputState.accel * clutchMultiplier;
+                gameState.speed = Math.min(gameState.speed + accelForce, currentGearData.maxSpeed);
+            } else {
+                gameState.speed *= 0.98;
+            }
+
+            // Braking
+            if (inputState.brake) {
+                gameState.speed *= 0.94;
+                gameState.lights.brake = true;
+            } else {
+                gameState.lights.brake = false;
+            }
+
+            // Handbrake
+            if (inputState.handbrake) {
+                gameState.speed *= 0.92;
+            }
+
+            // Reverse gear
+            if (gameState.currentGear === 'R' && inputState.accel) {
+                gameState.speed = -Math.max(gameState.speed, -60);
+            }
+
+            // Steering
+            if (inputState.left) gameState.steering = Math.max(gameState.steering - 0.1, -1);
+            if (inputState.right) gameState.steering = Math.min(gameState.steering + 0.1, 1);
+            gameState.steering *= 0.95;
+
+            // Update car position and rotation in 3D
+            if (bmwModel) {
+                bmwModel.position.z -= (gameState.speed / 200) * 0.3;
+                bmwModel.rotation.y += gameState.steering * 0.05;
+            }
+
+            // Update speedometer
+            document.getElementById('speedDisp').textContent = Math.round(gameState.speed).toString().padStart(3, '0');
+        }
+
+        // ============================================
+        // EVENT HANDLERS
+        // ============================================
+
+        // Engine Start/Stop
+        const engineBtn = document.getElementById('engineBtn');
+        engineBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            gameState.engine = !gameState.engine;
+            engineBtn.classList.toggle('engine-active');
+        });
+
+        // Gear System
+        const gearToggle = document.getElementById('gearToggle');
+        const gearDrawer = document.getElementById('gearDrawer');
+        const gearInfo = document.getElementById('gearInfo');
+
+        gearToggle.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const isVisible = window.getComputedStyle(gearDrawer).display === 'grid';
+            gearDrawer.style.display = isVisible ? 'none' : 'grid';
+        });
+
+        document.querySelectorAll('.gear-btn').forEach(btn => {
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.gear-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                gameState.currentGear = btn.dataset.gear;
+
+                const gearNames = {
+                    'P': 'Park - Stationary',
+                    'R': 'Reverse - Backward Motion',
+                    'N': 'Neutral - No Power',
+                    'D': 'Drive - Forward Motion',
+                    'S': 'Sport - High Performance',
+                    'L': 'Low - Maximum Torque'
+                };
+                gearInfo.textContent = gearNames[btn.dataset.gear];
+            });
+        });
+
+        // Light System
+        const lightToggle = document.getElementById('lightToggle');
+        const lightDrawer = document.getElementById('lightDrawer');
+
+        lightToggle.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const isVisible = window.getComputedStyle(lightDrawer).display === 'grid';
+            lightDrawer.style.display = isVisible ? 'none' : 'grid';
+        });
+
+        document.querySelectorAll('.light-btn').forEach(btn => {
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const lightType = btn.dataset.light;
+                gameState.lights[lightType] = !gameState.lights[lightType];
+                
+                btn.classList.toggle('light-active');
+                if (lightType === 'headlight') btn.classList.toggle('headlight-active');
+                if (lightType === 'brake') btn.classList.toggle('brake-active');
+                if (lightType === 'hazard') btn.classList.toggle('hazard-active');
+            });
+        });
+
+        // Bottom Control Buttons
+        const allBtns = document.querySelectorAll('.btn');
+
+        allBtns.forEach(btn => {
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                
+                const key = btn.dataset.key;
+                const toggle = btn.dataset.toggle;
+
+                if (key) {
+                    // Continuous input buttons
+                    switch(key) {
+                        case 'accel':
+                            inputState.accel = true;
+                            btn.classList.add('is-pressed');
+                            break;
+                        case 'brake':
+                            inputState.brake = true;
+                            btn.classList.add('is-pressed');
+                            break;
+                        case 'clutch':
+                            inputState.clutch = true;
+                            btn.classList.add('is-pressed');
+                            gameState.clutch = 1;
+                            break;
+                        case 'left':
+                            inputState.left = true;
+                            btn.classList.add('is-pressed');
+                            break;
+                        case 'right':
+                            inputState.right = true;
+                            btn.classList.add('is-pressed');
+                            break;
+                        case 'handbrake':
+                            inputState.handbrake = !inputState.handbrake;
+                            btn.classList.toggle('is-pressed');
+                            break;
+                        case 'gear_up':
+                            const gears = ['P', 'R', 'N', 'D', 'S', 'L'];
+                            const currentIdx = gears.indexOf(gameState.currentGear);
+                            if (currentIdx < gears.length - 1) {
+                                gameState.currentGear = gears[currentIdx + 1];
+                                updateGearDisplay();
+                            }
+                            break;
+                        case 'gear_down':
+                            const gears2 = ['P', 'R', 'N', 'D', 'S', 'L'];
+                            const currentIdx2 = gears2.indexOf(gameState.currentGear);
+                            if (currentIdx2 > 0) {
+                                gameState.currentGear = gears2[currentIdx2 - 1];
+                                updateGearDisplay();
+                            }
+                            break;
+                    }
+                } else if (toggle) {
+                    // Toggle buttons (indicators)
+                    btn.classList.toggle('active');
+                    if (toggle === 'left-indicator') {
+                        gameState.indicators.left = !gameState.indicators.left;
+                    } else if (toggle === 'right-indicator') {
+                        gameState.indicators.right = !gameState.indicators.right;
+                    }
+                }
+            });
+
+            btn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                
+                const key = btn.dataset.key;
+                
+                if (key && key !== 'handbrake' && key !== 'gear_up' && key !== 'gear_down') {
+                    switch(key) {
+                        case 'accel':
+                            inputState.accel = false;
+                            btn.classList.remove('is-pressed');
+                            break;
+                        case 'brake':
+                            inputState.brake = false;
+                            btn.classList.remove('is-pressed');
+                            break;
+                        case 'clutch':
+                            inputState.clutch = false;
+                            btn.classList.remove('is-pressed');
+                            gameState.clutch = 0;
+                            break;
+                        case 'left':
+                            inputState.left = false;
+                            btn.classList.remove('is-pressed');
+                            break;
+                        case 'right':
+                            inputState.right = false;
+                            btn.classList.remove('is-pressed');
+                            break;
+                    }
+                }
+            });
+        });
+
+        function updateGearDisplay() {
+            document.querySelectorAll('.gear-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.querySelector(`[data-gear="${gameState.currentGear}"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+        }
+
+        // Clutch value display
+        setInterval(() => {
+            document.getElementById('clutchValue').textContent = Math.round(gameState.clutch * 100) + '%';
+            
+            // Smoothly decrease clutch
+            if (inputState.clutch) {
+                gameState.clutch = Math.max(gameState.clutch - 0.02, 0);
+            } else {
+                gameState.clutch = Math.max(gameState.clutch - 0.05, 0);
+            }
+        }, 50);
+
+        // Prevent system gestures
+        document.body.addEventListener('touchstart', (e) => {
+            if (e.target.tagName !== 'INPUT') e.preventDefault();
+        }, {passive: false});
+
+        // Initialize 3D scene
+        window.addEventListener('load', init3DScene);
+
+        // Handle tab visibility
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                gameState.engine = false;
+                engineBtn.classList.remove('engine-active');
+            }
+        });
+    </script>
+</body>
+</html>
